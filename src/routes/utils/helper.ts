@@ -222,7 +222,7 @@ const initInterface = async (itf: Interface) => {
   }))
 }
 
-export {
+module.exports = {
   genExampleModule,
   genExampleInterface,
   initRepository,

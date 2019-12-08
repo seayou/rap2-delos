@@ -1,18 +1,12 @@
 import * as svgCaptcha from 'svg-captcha'
 import { User, Notification, Logger, Organization, Repository } from '../models'
 import router from './router'
-import { Model } from 'sequelize-typescript'
+import { Model, Sequelize } from 'sequelize-typescript';
 import Pagination from './utils/pagination'
 import { QueryInclude } from '../models'
-import { Op } from 'sequelize'
-import MailService from '../service/mail'
 import * as md5 from 'md5'
-import { isLoggedIn } from './base'
-import { AccessUtils } from './utils/access'
-import { COMMON_ERROR_RES } from './utils/const'
-
-
-
+import MailService from '../service/mail'
+const Op = Sequelize.Op
 
 router.get('/app/get', async (ctx, next) => {
   let data: any = {}
@@ -22,8 +16,8 @@ router.get('/app/get', async (ctx, next) => {
   }
   for (let name in hooks) {
     if (!query[name]) continue
-    data[name] = await hooks[name].findByPk(query[name], {
-      attributes: { exclude: [] }
+    data[name] = await hooks[name].findById(query[name], {
+      attributes: { exclude: [] },
     })
   }
   ctx.body = {
@@ -39,20 +33,14 @@ router.get('/account/count', async (ctx) => {
   }
 })
 
-router.get('/account/list', isLoggedIn, async (ctx) => {
-  // if (!AccessUtils.isAdmin(ctx.session.id)) {
-  //   ctx.body = COMMON_ERROR_RES.ACCESS_DENY
-  //   return
-  // }
+router.get('/account/list', async (ctx) => {
   let where = {}
   let { name } = ctx.query
   if (name) {
     Object.assign(where, {
-      [Op.or]: [{
-        fullname: {
-          [Op.like]: `%${name}%`
-        },
-      }],
+      [Op.or]: [
+        { fullname: { $like: `%${name}%` } },
+      ],
     })
   }
   let options = { where }
@@ -73,9 +61,9 @@ router.get('/account/list', isLoggedIn, async (ctx) => {
 
 router.get('/account/info', async (ctx) => {
   ctx.body = {
-    data: ctx.session.id ? await User.findByPk(ctx.session.id, {
-      attributes: QueryInclude.User.attributes
-    }) : undefined
+    data: ctx.session.id ? await User.findById(ctx.session.id, {
+      attributes: QueryInclude.User.attributes,
+    }) : undefined,
   }
 })
 
@@ -166,7 +154,7 @@ router.post('/account/update', async (ctx) => {
   } else if (password.length < 6) {
     errMsg = '密码长度过短'
   } else {
-    const user = await User.findByPk(ctx.session.id)
+    const user = await User.findById(ctx.session.id)
     user.password = md5(md5(password))
     await user.save()
     isOk = true
@@ -179,11 +167,7 @@ router.post('/account/update', async (ctx) => {
   }
 })
 
-router.get('/account/remove', isLoggedIn, async (ctx) => {
-  if (!AccessUtils.isAdmin(ctx.session.id)) {
-    ctx.body = COMMON_ERROR_RES.ACCESS_DENY
-    return
-  }
+router.get('/account/remove', async (ctx) => {
   if (process.env.TEST_MODE === 'true') {
     ctx.body = {
       data: await User.destroy({
@@ -260,7 +244,7 @@ router.get('/account/logger', async (ctx) => {
     }
     return
   }
-  let auth = await User.findByPk(ctx.session.id)
+  let auth = await User.findById(ctx.session.id)
   let repositories: Model<Repository>[] = [...(<Model<Repository>[]>await auth.$get('ownedRepositories')), ...(<Model<Repository>[]>await auth.$get('joinedRepositories'))]
   let organizations: Model<Organization>[] = [...(<Model<Organization>[]>await auth.$get('ownedOrganizations')), ...(<Model<Organization>[]>await auth.$get('joinedOrganizations'))]
 

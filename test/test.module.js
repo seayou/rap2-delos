@@ -22,7 +22,7 @@ describe('Module', () => {
   })
   let validModule = (mod) => {
     mod.should.be.a('object').have.all.keys(
-      Object.keys(Module.rawAttributes)
+      Object.keys(Module.attributes)
     )
     mod.creatorId.should.be.a('number')
     mod.repositoryId.should.be.a('number')

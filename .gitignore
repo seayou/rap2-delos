@@ -10,4 +10,3 @@ tmp
 package-lock.json
 dump.rdb
 /docker/mysql/volume
-.idea

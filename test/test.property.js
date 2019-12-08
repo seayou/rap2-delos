@@ -33,7 +33,7 @@ describe('Property', () => {
   })
   let validProperty = (property) => {
     property.should.be.a('object').have.all.keys(
-      Object.keys(Property.rawAttributes)
+      Object.keys(Property.attributes)
     )
     property.creatorId.should.be.a('number')
     property.repositoryId.should.be.a('number')

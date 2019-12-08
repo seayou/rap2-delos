@@ -1,8 +1,5 @@
 import * as Router from 'koa-router'
-import { DefaultState, DefaultContext } from "koa"
-import config from '../config'
-
-let router = new Router<DefaultState, DefaultContext>({prefix: config.serve.path})
+let router = new Router()
 
 // index
 router.get('/', (ctx) => {

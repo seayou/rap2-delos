@@ -1,15 +1,15 @@
 // TODO 2.2 如何缓存重复查询？https://github.com/rfink/sequelize-redis-cache
 import { Helper } from './helper'
-import User from '../bo/user'
-import Repository from '../bo/repository'
-import Module from '../bo/module'
-import Organization from '../bo/organization'
-import Interface from '../bo/interface'
-import Property from '../bo/property'
-import { IncludeOptions } from 'sequelize'
+import User from '../bo/user';
+import Repository from '../bo/repository';
+import Module from '../bo/module';
+import Organization from '../bo/organization';
+import Interface from '../bo/interface';
+import Property from '../bo/property';
+import { Model, IIncludeOptions } from 'sequelize-typescript';
 
 declare interface IQueryInclude {
-  [key: string]: IncludeOptions
+  [key: string]: typeof Model | IIncludeOptions
 }
 
 const QueryInclude: IQueryInclude = {

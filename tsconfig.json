@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "dist",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2019",
+    "target": "es6",
     "removeComments": true,
     "sourceMap": true,
     "watch": false,

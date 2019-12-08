@@ -8,7 +8,6 @@ import * as cors from 'kcors'
 import * as bodyParser from 'koa-body'
 import router from '../routes'
 import config from '../config'
-import { startTask } from '../service/task'
 
 const app = new Koa()
 let appAny: any = app
@@ -21,7 +20,7 @@ app.use(session({
 if (process.env.NODE_ENV === 'development' && process.env.TEST_MODE !== 'true') app.use(logger())
 app.use(async (ctx, next) => {
 
-  ctx.set('Access-Control-Allow-Origin', '*')
+  ctx.set('Access-Control-Allow-Origin', '*');
   ctx.set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
   ctx.set('Access-Control-Allow-Credentials', 'true')
   await next()
@@ -54,7 +53,5 @@ app.use(serve('test'))
 app.use(bodyParser({ multipart: true }))
 
 app.use(router.routes())
-
-startTask()
 
 export default app
