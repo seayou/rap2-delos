@@ -1,9 +1,10 @@
 import { Repository, RepositoriesMembers } from "../models"
-import OrganizationService from "./organization";
+import OrganizationService from "./organization"
 
 export default class RepositoryService {
-  public static async canUserAccessRepository(userId: number, repositoryId: number): Promise<boolean> {
-    const repo = await Repository.findById(repositoryId)
+  public static async canUserAccessRepository(userId: number, repositoryId: number, token?: string): Promise<boolean> {
+    const repo = await Repository.findByPk(repositoryId)
+    if (token && repo.token === token) return true
     if (!repo) return false
     if (repo.creatorId === userId || repo.ownerId === userId) return true
     const memberExistsNum = await RepositoriesMembers.count({

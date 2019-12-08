@@ -1,10 +1,11 @@
-import { IConfigOptions } from "../types";
+import { IConfigOptions } from "../types"
 
 // 先从环境变量取配置
 let config: IConfigOptions =  {
-    version: '2.3',
+    version: '2.8.0',
     serve: {
-        port: (process.env.EXPOSE_PORT && parseInt(process.env.EXPOSE_PORT)) || 8080,
+        port: (process.env.SERVE_PORT && parseInt(process.env.SERVE_PORT)) || 8080,
+        path: '',
     },
     keys: ['some secret hurr'],
     session: {
